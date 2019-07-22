@@ -1,0 +1,47 @@
+security:
+    encoders:
+        App\Entity\User:
+        # Pour encrypter les données concernants les user, je vais utiliser 
+            algorithm: bcrypt
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        in_memory: { memory: ~ }
+        # Je créer un provider qui s'appelle in-database, il me permettra dans mes differents firewall de les utiliser
+        in_database: 
+            entity:
+                # Il faudra aller chercher dans la class User
+                class: App\Entity\User
+                # La propriété par laquelle on va chercher les users c'est email
+                property: email
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+
+            # Ici j'utilise le provider in_database
+            provider: in_database
+            # Via un formulaire de login    
+            form_login: 
+                # Où? via le chemin qui s'appelle security_login
+                login_path: security_login
+                # Où je peux vérifier si c'est ok? il va utiliser la meme route pour afficher ou vérifier les info du formulaire de connexion
+                check_path: security_login
+
+            # Sur ma fonction logout, j'ai ma route security_logout et mon target qui est l'endroit où se rendre après un logout
+            logout:
+                path: security_logout
+                target: blog
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }

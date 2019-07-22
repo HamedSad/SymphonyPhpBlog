@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {# Afficher #}
+    <h1>Bienvenus dans ce blog</h1>
+
+    {# Traitement d'une commande #}
+    {% if age > 18 %}
+        <p>tu es majeur</p>
+    {% else %}
+        <p>tu es mineur</p>
+    {% endif %}
+
+{% endblock %}
